@@ -2,19 +2,19 @@ clc
 clear all
 
 t_w=xlsread('CO2PTA.xlsx','sheet2','A2:A8920'); 
-qg_ECL=xlsread('CO2PTA.xlsx','sheet2','E2:E8920');  %×¢Èë
+qg_ECL=xlsread('CO2PTA.xlsx','sheet2','E2:E8920');  %æ³¨å…¥
 qw_ECL=xlsread('CO2PTA.xlsx','sheet2','E2:E8920'); 
 Wp=xlsread('CO2PTA.xlsx','sheet2','F2:F8920'); % bbl
 pwin_ECL_w=xlsread('CO2PTA.xlsx','sheet2','D2:D8920'); % ECL pave
 pbar_ecl_w=xlsread('CO2PTA.xlsx','sheet2','B2:B8920'); % ECL pave 
 Sw_ECL_w=xlsread('CO2PTA.xlsx','sheet2','C2:C8920'); 
-pbar_MBE(i)=xlsread('CO2PTA.xlsx','sheet2','G2:G8920'); 
-Sw_MBE(i)=xlsread('CO2PTA.xlsx','sheet2','H2:H8920'); 
+pbar_MBE=xlsread('CO2PTA.xlsx','sheet2','G2:G8920'); 
+Sw_MBE=xlsread('CO2PTA.xlsx','sheet2','H2:H8920'); 
 Sw_ECL_w=Sw_ECL_w./100; 
 % 1 means gas, 2 means water
 t=t_w;
 aa=0;
-    Control=2    %2Îª¶¨Ñ¹£¬1Îª¶¨²ú  
+    Control=2    %2ä¸ºå®šå‹ï¼Œ1ä¸ºå®šäº§  
     Pi=pbar_ecl_w(1); % (in put) psi initial condition 
     Cw=1E-7;%3.17E-5; 
     Cp=4.7E-6;%4.7E-6;%1e-8
@@ -33,7 +33,7 @@ aa=0;
 Q1=7000; %max(Q,Q_g)
 tspt_MBEa=zeros(Q1,1);
 tspt_MBE=zeros(Q1,1);        
-  %%     ÎïÖÊÆ½ºâ·¨ÇóÆ½¾ùÁÑ·ìÑ¹Á¦
+  %%     ç‰©è´¨å¹³è¡¡æ³•æ±‚å¹³å‡è£‚ç¼å‹åŠ›
     Swi= Sw_ECL_w(1);
     Sw_MBE(1)=Swi;  
     Sw_MBEa(1)=Swi;
@@ -47,13 +47,13 @@ tspt_MBE=zeros(Q1,1);
     Krg_endpoint=1;
     Swa=0.2;
     Sgc=0;
-    krwn=3;%ÏàÉøÖ¸Êı
-    krgn=1.5;%ÏàÉøÖ¸Êı
+    krwn=3;%ç›¸æ¸—æŒ‡æ•°
+    krgn=1.5;%ç›¸æ¸—æŒ‡æ•°
     Krg(1)=Krg_endpoint.*((1-Swi-Sgc)/(1-Swa-Sgc)).^krgn; 
     Krw(1)=Krw_endpoint.*((Swi-Swa)/(1-Swa-Sgc)).^krwn;       
-   %%%%%%%%%%%%%%%%%%%Æ½¾ùÑ¹Á¦
+   %%%%%%%%%%%%%%%%%%%å¹³å‡å‹åŠ›
               
-   %% Ë®Ïà ÌØÕ÷ÇúÏß 
+   %% æ°´ç›¸ ç‰¹å¾æ›²çº¿ 
       for i=2:Q1 
        Swi=Sw_ECL_w(1);   
        ug(i)=(0.0254.*log(pbar_MBE(i))-0.1266).*1.001;%0.0357.*exp(0.0002.*pbar_MBE(i));
@@ -63,10 +63,10 @@ tspt_MBE=zeros(Q1,1);
        Bg(i)=48.45338.*5.615./pbar_MBE(i);     
        M(i)=Krw(i)./uw./(Krg(i)./ug(i));  
      end
-   %% ¶¨²úÄâÑ¹Á¦ 
+   %% å®šäº§æ‹Ÿå‹åŠ› 
    for i=2:Q1    
        N=1:1000; 
-   if qg_ECL(100)==qg_ECL(102);%¶¨²ú 
+   if qg_ECL(100)==qg_ECL(102);%å®šäº§ 
        
 %          co_P_Sw=polyfit(pbar_MBE_BL(3000:Q1),Sw_BL_Ava(3000:Q1),1);
                                      % for gas model
@@ -74,7 +74,7 @@ tspt_MBE=zeros(Q1,1);
         Sw_discrete=-0.79.*log(pdiscrete)+6.625;% co_P_Sw(1)*pdiscrete+co_P_Sw(2);
 %         Sw_discrete=co_P_Sw(1).*pdiscrete+co_P_Sw(2);
         Sw_discrete(Sw_discrete > 0.8) = 0.798;
-        %         Sw_discrete=(-0.000006.*pdiscrete+75.432)/100;%-3E-06.*pdiscrete+0.7042;%=-0.00065.*pdiscrete+1.642;%-2E-5.*pdiscrete+0.4234;%=-2E-13.*pdiscretexp3+3E-10.*pdiscretexp2+3E-07.*pdiscrete+0.3992;%-6E-15.*pdiscretexp4 + 6E-11.*pdiscretexp3 - 2E-07.*pdiscretexp2 + 0.0003.*pdiscrete + 0.2273;%-2E-05.*pdiscrete+0.4231(Æ½¾ùÑ¹Á¦);
+        %         Sw_discrete=(-0.000006.*pdiscrete+75.432)/100;%-3E-06.*pdiscrete+0.7042;%=-0.00065.*pdiscrete+1.642;%-2E-5.*pdiscrete+0.4234;%=-2E-13.*pdiscretexp3+3E-10.*pdiscretexp2+3E-07.*pdiscrete+0.3992;%-6E-15.*pdiscretexp4 + 6E-11.*pdiscretexp3 - 2E-07.*pdiscretexp2 + 0.0003.*pdiscrete + 0.2273;%-2E-05.*pdiscrete+0.4231(å¹³å‡å‹åŠ›);
         Bg_d=48.45338.*5.615./pdiscrete;
         ug_d=(0.0254.*log(pdiscrete)-0.1266).*1.001;%0.0357.*exp(0.0002.*pdiscrete);
         Krg_d= Krg_endpoint.*((1-Sw_discrete-Sgc)/(1-Swa-Sgc)).^krgn;%0.16^2.*(1-Sw_MBE(i));%3.67.*Sw_MBE(i).^2-5.3.*Sw_MBE(i)+1.87; 
@@ -101,7 +101,7 @@ tspt_MBE=zeros(Q1,1);
         Cg2=1./pbar_MBE;
         Ce2=(Cg2.*(1-Sw_MBE)+Cw.*Sw_MBE);
         innerppi_g=Krg2./ug2./Bg2.*exp(-(ga).*(Pi-pbar_MBE)); % Bg=17.553343*p^(-1)
-        ppoi=trapz(pbar_MBE,innerppi_g).*ug(1)*Bgi+zeros(Q1,1); %ºÍÕÅÀÏÊ¦Ä£ĞÍ±£³ÖÒ»ÖÂ
+        ppoi=trapz(pbar_MBE,innerppi_g).*ug(1)*Bgi+zeros(Q1,1); %å’Œå¼ è€å¸ˆæ¨¡å‹ä¿æŒä¸€è‡´
 
         pdiscrete_FMB=pbar_MBE(i)+(pwin_ECL_w(i)-pbar_MBE(i))/(length(N)).*N;
         %         Sw_discrete_2=(-6E-04.*pdiscrete_FMB +75.857)/100; 
@@ -143,11 +143,11 @@ end
       hold on  
       figure (3)    % disgnostic plot to see half slope
       loglog(tspt_MBE(2:Q1-1),DRNPw(2:Q1-1),'.b')
-      xlabel('µÈĞ§ÄâÊ±¼ä');
+      xlabel('ç­‰æ•ˆæ‹Ÿæ—¶é—´');
       ylabel('DRNPw');
       legend('Tr_shutin vs  DRNP')%,'gas tp ANA MBE   vs  RNP gas');
-      title('ìË¾®½×¶ÎË®Õï¶ÏÇúÏß');        
-%% ÄâºÏÖ±Ïß ×öÅĞ¶ÏÇúÏß
+      title('ç„–äº•é˜¶æ®µæ°´è¯Šæ–­æ›²çº¿');        
+%% æ‹Ÿåˆç›´çº¿ åšåˆ¤æ–­æ›²çº¿
      RL=2000; % for variable q 
      Q=6990;
      Flow=2
@@ -159,16 +159,16 @@ end
         slope_IALF=co_IALF(1);                                  % for gas model
         intercept_IALF=co_IALF(2);                                 % for gas model
     for i=2:Q1
-        regress_IALF(i)=slope_IALF.*trp(i)+ intercept_IALF;    % for gas model  ÄâºÏÅĞ¶ÏÖ±Ïß£¿£¿£¿
+        regress_IALF(i)=slope_IALF.*trp(i)+ intercept_IALF;    % for gas model  æ‹Ÿåˆåˆ¤æ–­ç›´çº¿ï¼Ÿï¼Ÿï¼Ÿ
     end
         k_IALF=(14.18*Bgi*ug(1).^0.5/wf/h/fai^0.5/Cei^0.5/slope_IALF)^2
             hold on
               figure (6) % specialty plot
               plot(trp(2:Q1),RNP(2:Q1),'.r',trp(2:Q1),regress_IALF(2:Q1),'-b')
-              xlabel('ÄâÊ±¼ä^0.5');
+              xlabel('æ‹Ÿæ—¶é—´^0.5');
               ylabel('RNPg');
               legend('tp ANA MBE  vs  RNP','straight line');
-              title('ÏßĞÔÁ÷ÆøÏàÌØÕ÷ÇúÏß');
+              title('çº¿æ€§æµæ°”ç›¸ç‰¹å¾æ›²çº¿');
    else 
         co_BDF=polyfit(tspt_MBE(RL:Q),RNP(RL:Q),1);        % for gas model
         co_FMB=polyfit(g_FMB(RL:Q),PNP(RL:Q),1);
@@ -177,7 +177,7 @@ end
         slope_FMB=co_FMB(1);                                  % for gas model
         intercept_FMB=co_FMB(2);                              % for gas model 
         for i=2:Q1
-        regress_BDF(i)=slope_BDF.* tspt_MBE(i)+intercept_BDF;    % for gas model  ÄâºÏÅĞ¶ÏÖ±Ïß£¿£¿£¿
+        regress_BDF(i)=slope_BDF.* tspt_MBE(i)+intercept_BDF;    % for gas model  æ‹Ÿåˆåˆ¤æ–­ç›´çº¿ï¼Ÿï¼Ÿï¼Ÿ
         regress_FMB(i)=slope_FMB.* g_FMB(i)+intercept_FMB;  
         end    
         rm_BDF=sqrt(Bgi/fai/h/Cei/3.14/slope_BDF) % for gas model
@@ -191,21 +191,22 @@ end
         hold on
         figure (7) % specialty plot
         plot((tspt_MBE(2:Q1)),RNP(2:Q1),'.r',(tspt_MBE(2:Q1)),regress_BDF(2:Q1),'-b')
-        xlabel('ÄâÊ±¼ä');
+        xlabel('æ‹Ÿæ—¶é—´');
         %%
         % *BOLD TEXT*
         ylabel('RNPg');
         legend('tp ANA MBE  vs  RNP','straight line');
-        title('±ß½çÁ÷ÆøÏàÌØÕ÷ÇúÏß');
+        title('è¾¹ç•Œæµæ°”ç›¸ç‰¹å¾æ›²çº¿');
         figure (8) % specialty plot
         plot((g_FMB(2:Q1)),PNP(2:Q1),'.r',(g_FMB(2:Q1)),regress_FMB(2:Q1),'-b')
-        xlabel('ÎïÖÊÆ½ºâÊ±¼ä');
+        xlabel('ç‰©è´¨å¹³è¡¡æ—¶é—´');
         ylabel('PNPg');
         legend('tp ANA MBE  vs  RNP','straight line');
-        title('±ß½çÁ÷ÆøÏàÌØÕ÷ÇúÏß');
+        title('è¾¹ç•Œæµæ°”ç›¸ç‰¹å¾æ›²çº¿');
         
    end 
               
+
 
 
 
